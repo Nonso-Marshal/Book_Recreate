@@ -74,6 +74,20 @@ def test_update_book():
     assert update_book_data['message'] == "Book updated successfully"
     assert update_book_data['data']['title'] == update_payload['title']
 
+def test_update_book_not_found():
+    book_id = str(uuid4())
+    update_payload = {
+        "title": "Things Fall Apart",
+        "author": "Chinua Achebe",
+        "year": 1956,
+        "pages": 600,
+        "language": "Nigerian English"
+    }
+    update_response = client.put(f"/books/{book_id}", json=update_payload)
+    assert update_response.status_code == 404
+    assert update_response.json()["detail"] == f"Book with id: {book_id} not found"
+
+
 
 def test_delete_book():
     payload = {
